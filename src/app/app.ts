@@ -1,11 +1,9 @@
-import { User } from './models/user.model';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { UserDepartment, UserRole } from './enums/user.enum';
 import { HasPermission } from './directives/has-permission';
-import { UserService } from './services/user';
-import { CommonModule } from '@angular/common';
+import { UserDepartment, UserRole } from './enums/user.enum';
 import { PermissionService } from './services/permission';
+import { UserService } from './services/user';
 
 @Component({
   selector: 'app-root',
