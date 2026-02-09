@@ -1,5 +1,5 @@
 import { Directive, effect, inject, input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { Permission } from '../services/permission';
+import { PermissionService } from '../services/permission';
 import { UserDepartment, UserRole } from '../enums/user.enum';
 
 @Directive({
@@ -9,7 +9,7 @@ export class HasPermission {
   appHasPermission = input<{ roles?: UserRole[]; departments?: UserDepartment[] }>();
   templateRef = inject(TemplateRef);
   viewContainer = inject(ViewContainerRef);
-  private permissionService = inject(Permission);
+  private permissionService = inject(PermissionService);
 
   constructor() {
     effect(() => {

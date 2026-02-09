@@ -1,11 +1,11 @@
-import { effect, inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
+import { effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { UserService } from './user';
 import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Permission {
+export class PermissionService {
   private userService = inject(UserService);
 
   currentUser: WritableSignal<User | null> = signal(null);

@@ -1,10 +1,10 @@
 import { CanActivateFn } from '@angular/router';
-import { Permission } from '../services/permission';
+import { PermissionService } from '../services/permission';
 import { inject } from '@angular/core';
 import { UserDepartment, UserRole } from '../enums/user.enum';
 
 export const permissionGuard: CanActivateFn = (route, state) => {
-  const permissionService = inject(Permission);
+  const permissionService = inject(PermissionService);
 
   const authorities = route.data['authorities'] as {
     roles?: UserRole[];
@@ -17,11 +17,5 @@ export const permissionGuard: CanActivateFn = (route, state) => {
 
   const { roles = [], departments = [] } = authorities;
 
-  
-
-  if (!permissionService.hasPermission(roles, departments)) {
-    console.log('Permission guard: Access denied');
-    return false;
-  }
-  return true;
+  return permissionService.hasPermission(roles, departments);
 };

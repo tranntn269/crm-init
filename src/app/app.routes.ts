@@ -8,7 +8,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: Dashboard,
-    canActivate: [Authen],
+    canActivate: [permissionGuard],
     data: {
       authorities: {
         roles: [UserRole.STAFF], // Required roles
@@ -20,14 +20,4 @@ export const routes: Routes = [
     redirectTo: 'dashboard',
     pathMatch: 'full',
   },
-  //   {
-  //     path: 'dashboard',
-  //     component: Dashboard,
-  //     canActivate: [permissionGuard],
-  //     data: {
-  //       authorities: {
-  //         roles: [UserRole.STAFF], // Required roles
-  //       },
-  //     },
-  //   },
 ];

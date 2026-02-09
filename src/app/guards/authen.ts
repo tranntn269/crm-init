@@ -1,13 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
-import { Permission } from '../services/permission';
+import { PermissionService } from '../services/permission';
 import { UserDepartment, UserRole } from '../enums/user.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Authen implements CanActivate {
-  permissionService = inject(Permission);
+  permissionService = inject(PermissionService);
   canActivate(route: ActivatedRouteSnapshot): boolean {
     // Implement your authentication logic here
 
