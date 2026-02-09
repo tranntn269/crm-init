@@ -4,6 +4,7 @@ import { HasPermission } from './directives/has-permission';
 import { UserDepartment, UserRole } from './enums/user.enum';
 import { PermissionService } from './services/permission';
 import { UserService } from './services/user';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
