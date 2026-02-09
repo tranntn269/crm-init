@@ -1,0 +1,5 @@
+{
+  "username": "Sarah Smith",
+  "roles": ["STAFF", "TESTER"],
+  "departments": ["TECH"]
+}
