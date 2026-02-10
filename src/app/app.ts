@@ -5,10 +5,12 @@ import { UserDepartment, UserRole } from './enums/user.enum';
 import { PermissionService } from './services/permission';
 import { UserService } from './services/user';
 import { CommonModule } from '@angular/common';
+import { HasDepartment } from './directives/has-department';
+import { HasRole } from './directives/has-role';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HasPermission, CommonModule],
+  imports: [RouterOutlet, HasPermission, CommonModule, HasDepartment, HasRole],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

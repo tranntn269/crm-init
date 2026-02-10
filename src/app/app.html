@@ -1,27 +1,15 @@
-<ng-template
-  [appHasPermission]="{
-    roles: [staffRole],
-    departments: [techDepartment],
-  }"
->
-  <p>Only Admin</p>
+<ng-template [hasPermission]="['READ']">
+  <p>READ Permission</p>
 </ng-template>
 
-<ng-template
-  [appHasPermission]="{
-    roles: [testerRole],
-  }"
->
-  <p>Only Tester</p>
+<ng-template [hasRole]="[staffRole]">
+  <p>Staff Role</p>
 </ng-template>
 
-<ng-template
-  [appHasPermission]="{
-    departments: [officeDepartment],
-  }"
->
-  <p>Only Office Department</p>
+<ng-template [hasDepartment]="[techDepartment]">
+  <p>Tech Department</p>
 </ng-template>
+
 @if (userService.currentUser()) {
   <router-outlet></router-outlet>
 }

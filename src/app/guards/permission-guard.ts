@@ -1,18 +1,21 @@
+import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { PermissionService } from '../services/permission';
-import { inject } from '@angular/core';
-import { UserPermission } from '../models/user.model';
 
 export const permissionGuard: CanActivateFn = (route, state) => {
   const permissionService = inject(PermissionService);
 
-  const authorities = route.data['authorities'] as UserPermission;
+  const requiredRoles = route.data['authorities']?.roles ?? [];
+  const requiredDepartments = route.data['authorities']?.departments ?? [];
+  const requiredPermissions = route.data['authorities']?.permissions ?? [];
 
-  if (!authorities) {
+  if (!requiredRoles.length && !requiredDepartments.length && !requiredPermissions.length) {
     return true;
   }
 
-  const { roles = [], departments = [] } = authorities;
-
-  return permissionService.hasPermission(roles, departments);
+  return (
+    permissionService.hasRole(requiredRoles) &&
+    permissionService.hasDepartment(requiredDepartments) &&
+    permissionService.hasPermission(requiredPermissions)
+  );
 };

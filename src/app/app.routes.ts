@@ -1,16 +1,18 @@
 import { Routes } from '@angular/router';
 import { Dashboard } from './components/dashboard/dashboard';
-import { permissionGuard } from './guards/permission-guard';
-import { UserRole } from './enums/user.enum';
+import { UserDepartment, UserRole } from './enums/user.enum';
+import { canMatchPermissionGuard } from './guards/can-match-permission-guard';
 
 export const routes: Routes = [
   {
     path: 'dashboard',
     component: Dashboard,
-    canActivate: [permissionGuard],
+    canMatch: [canMatchPermissionGuard],
     data: {
       authorities: {
         roles: [UserRole.STAFF],
+        permissions: ['CREATE'],
+        departments: [UserDepartment.TECH],
       },
     },
   },
