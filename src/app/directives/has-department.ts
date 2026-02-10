@@ -14,7 +14,7 @@ export class HasDepartment {
     effect(() => {
       const requiredDepartments = this.hasDepartment() ?? [];
 
-      const hasDepartment = this.permissionService.hasDepartment(requiredDepartments);
+      const hasDepartment = this.permissionService.hasDepartment(requiredDepartments, false);
 
       if (hasDepartment) {
         this.viewContainer.createEmbeddedView(this.templateRef);

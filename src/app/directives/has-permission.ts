@@ -13,7 +13,7 @@ export class HasPermission {
   constructor() {
     effect(() => {
       const requiredPermission = this.hasPermission() ?? [];
-      const hasPermission = this.permissionService.hasPermission(requiredPermission);
+      const hasPermission = this.permissionService.hasPermission(requiredPermission, false);
 
       if (hasPermission) {
         console.debug('User has permission, rendering template');

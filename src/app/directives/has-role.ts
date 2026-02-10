@@ -14,7 +14,7 @@ export class HasRole {
     effect(() => {
       const requiredRoles = this.hasRole() ?? [];
 
-      const hasRole = this.permissionService.hasRole(requiredRoles);
+      const hasRole = this.permissionService.hasRole(requiredRoles, false);
 
       if (hasRole) {
         this.viewContainer.createEmbeddedView(this.templateRef);

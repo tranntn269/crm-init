@@ -9,27 +9,42 @@ export class PermissionService {
 
   currentUser = computed(() => this.userService.currentUser());
 
-  hasRole(requiredRoles: string[] = []): boolean {
+  hasRole(requiredRoles: string[] = [], matchAll = true): boolean {
     if (!this.currentUser()) {
       return false;
     }
 
-    return requiredRoles.every((role) => this.currentUser()!.roles?.includes(role));
+    if (matchAll) {
+      return requiredRoles.every((role) => this.currentUser()!.roles?.includes(role));
+    }
+
+    return requiredRoles.some((role) => this.currentUser()!.roles?.includes(role));
   }
 
-  hasDepartment(requiredDepartments: string[] = []): boolean {
+  hasDepartment(requiredDepartments: string[] = [], matchAll = true): boolean {
     if (!this.currentUser()) {
       return false;
     }
 
-    return requiredDepartments.every((department) =>
+    if (matchAll) {
+      return requiredDepartments.every((department) =>
+        this.currentUser()!.departments?.includes(department),
+      );
+    }
+    return requiredDepartments.some((department) =>
       this.currentUser()!.departments?.includes(department),
     );
   }
 
-  hasPermission(requiredPermissions: string[] = []): boolean {
+  hasPermission(requiredPermissions: string[] = [], matchAll = true): boolean {
     if (!this.currentUser()) {
       return false;
+    }
+
+    if (matchAll) {
+      return requiredPermissions.every((permission) =>
+        this.currentUser()!.permissions?.includes(permission),
+      );
     }
     return requiredPermissions.every((permission) =>
       this.currentUser()!.permissions?.includes(permission),
