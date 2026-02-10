@@ -35,21 +35,4 @@ export class PermissionService {
       this.currentUser()!.permissions?.includes(permission),
     );
   }
-
-  // hasPermissionTest(requiredRoles: string[] = [], requiredDepartments: string[] = []): boolean {
-  //   if (!this.currentUser()) {
-  //     console.debug('No current user found');
-  //     return false;
-  //   }
-
-  //   const userRoles = this.currentUser()!.roles ?? [];
-  //   const userDepartments = this.currentUser()!.departments ?? [];
-
-  //   const hasRole = requiredRoles.every((requiredRole) => userRoles.includes(requiredRole));
-  //   const hasDepartment = requiredDepartments.every((requiredDepartment) =>
-  //     userDepartments.includes(requiredDepartment),
-  //   );
-
-  //   return hasRole && hasDepartment;
-  // }
 }
