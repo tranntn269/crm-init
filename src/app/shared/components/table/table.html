@@ -1,0 +1,28 @@
+<div hlmTableContainer>
+  <table hlmTable>
+    <thead hlmTHead>
+      <tr hlmTr>
+        @for (column of columns; track $index) {
+          <th hlmTh>{{ column.header() }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody hlmTBody>
+      @for (row of rows(); track $index) {
+        <tr hlmTr>
+          @for (column of columns; track $index) {
+            <td hlmTd>
+              @if (column.cellTmpl) {
+                <ng-container
+                  *ngTemplateOutlet="column.cellTmpl.templateRef; context: { $implicit: row }"
+                ></ng-container>
+              } @else {
+                {{ row[column.key()] }}
+              }
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,50 @@
+[
+  {
+    "username": "Sarah Smith",
+    "roles": ["STAFF", "TESTER"],
+    "departments": ["TECH"],
+    "permissions": ["READ", "CREATE", "UPDATE", "DELETE"],
+    "clientName": "Acme Corp",
+    "email": "sarah.smith@acme.com",
+    "phone": "8005542234",
+    "dob": 1770912123210
+  },
+  {
+    "username": "John Davis",
+    "roles": ["ADMIN", "MANAGER"],
+    "departments": ["OPERATIONS", "SALES"],
+    "permissions": ["READ", "CREATE", "UPDATE", "DELETE", "ADMIN"],
+    "clientName": "Tech Solutions Inc",
+    "address": "123 Business Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001",
+    "country": "USA",
+    "phone": "8005542234",
+    "email": "john.davis@techsolutions.com",
+    "dob": 1770912123210
+  },
+  {
+    "username": "Emily Chen",
+    "roles": ["STAFF"],
+    "departments": ["SUPPORT"],
+    "permissions": ["READ", "CREATE", "UPDATE"],
+    "email": "emily.chen@company.com",
+    "phone": "8005542234",
+    "dob": 1770912123210
+  },
+  {
+    "username": "Michael Brown",
+    "roles": ["STAFF", "ANALYST"],
+    "departments": ["TECH", "DATA"],
+    "permissions": ["READ", "CREATE", "UPDATE", "DELETE"],
+    "clientName": "DataStream LLC",
+    "address": "456 Innovation Dr",
+    "city": "San Francisco",
+    "state": "CA",
+    "zip": "94102",
+    "country": "USA",
+    "email": "michael.brown@datastream.com",
+    "dob": 1770912123210
+  }
+]

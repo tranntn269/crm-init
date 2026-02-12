@@ -1,0 +1,20 @@
+<!-- @for (user of users; track $index) {
+  <div>{{ user.username }}</div>
+} -->
+
+<app-table [rows]="users" [page]="1" [pageSize]="10" [totalRows]="users.length">
+  <table-column header="Name" key="username"></table-column>
+  <table-column header="Departments" key="departments"></table-column>
+  <!-- <table-column header="Permissions " key="permissions"></table-column> -->
+  <table-column header="Address" key="address"></table-column>
+  <table-column header="Phone" key="phone"></table-column>
+  <!-- <table-column header="City" key="city"></table-column>
+  <table-column header="State" key="state"></table-column>
+  <table-column header="Zip" key="zip"></table-column>
+  <table-column header="Country" key="country"></table-column>
+  <table-column header="Email" key="email"></table-column>
+  <table-column header="Actions" key="actions"></table-column> -->
+  <table-column header="DOB" key="dob" [dataType]="COL_TYPE.DATE">
+    <ng-template appCell let-row>{{ row.dob | date: 'dd/MM/yyyy' }}</ng-template>
+  </table-column>
+</app-table>
