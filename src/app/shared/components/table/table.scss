@@ -16,4 +16,8 @@
     z-index: 1;
     background: inherit;
   }
+
+  tr[data-selected='true'] {
+    background-color: #fff6e4;
+  }
 }

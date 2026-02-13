@@ -3,6 +3,13 @@
     <table hlmTable>
       <thead hlmTHead>
         <tr hlmTr class="border-b h-16 bg-[#DFE2E7] hover:bg-[#DFE2E7] border-[#8C9FBD]">
+          <th>
+            <hlm-checkbox
+              [checked]="getIsAllPageRowsSelected()"
+              [indeterminate]="getIsSomePageRowsSelected()"
+              (checkedChange)="toggleAllPageRowsSelected()"
+            />
+          </th>
           @for (column of columns; track $index) {
             <th
               hlmTh
@@ -21,13 +28,13 @@
                 @if (column.sortable()) {
                   @switch (column.sortOrder()) {
                     @case (SORT_ORDER.ASC) {
-                      <ng-icon hlm size="xl" name="lucideChevronDown" class="sort-icon" />
+                      <ng-icon hlm name="lucideChevronDown" class="sort-icon" />
                     }
                     @case (SORT_ORDER.DESC) {
-                      <ng-icon hlm size="xs" name="lucideChevronUp" class="sort-icon" />
+                      <ng-icon hlm name="lucideChevronUp" class="sort-icon" />
                     }
                     @case (SORT_ORDER.NONE) {
-                      <ng-icon hlm size="xl" name="lucideChevronsUpDown" class="sort-icon" />
+                      <ng-icon hlm name="lucideChevronsUpDown" class="sort-icon" />
                     }
                   }
                 }
@@ -38,7 +45,7 @@
       </thead>
       <tbody hlmTBody>
         @if (isLoading()) {
-          @for (row of loadingItems(); track $index) {
+          @for (row of loadingItems(); track $index; let index = $index) {
             <tr hlmTr class="hover:bg-white">
               @for (column of columns; track $index) {
                 <td hlmTd class="p-4 pl-5">
@@ -48,8 +55,18 @@
             </tr>
           }
         } @else if (!isLoading() && data().length) {
-          @for (row of data(); track $index) {
-            <tr hlmTr class="border-[#DBDFE0] bg-white hover:bg-[#FFF6E4]">
+          @for (row of data(); track $index; let index = $index) {
+            <tr
+              hlmTr
+              class="border-[#DBDFE0] bg-white hover:bg-[#FFF6E4]"
+              [attr.data-selected]="rowSelection()[index]"
+            >
+              <td>
+                <hlm-checkbox
+                  [checked]="rowSelection()[index]"
+                  (checkedChange)="getToggleSelectedHandler(index, $event)"
+                />
+              </td>
               @for (column of columns; track $index) {
                 <td
                   hlmTd

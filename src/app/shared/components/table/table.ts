@@ -1,5 +1,4 @@
 import {
-  AfterContentInit,
   Component,
   computed,
   ContentChildren,
@@ -7,7 +6,9 @@ import {
   model,
   output,
   QueryList,
+  signal,
   Signal,
+  WritableSignal,
 } from '@angular/core';
 import { Dictionary } from '../../../models/types.model';
 import { Column } from '../../../directives/column';
@@ -22,6 +23,8 @@ import { lucideChevronDown, lucideChevronUp, lucideChevronsUpDown } from '@ng-ic
 import { ALIGN_FROZEN, SORT_ORDER } from '../../../enums/table.enum';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 
+import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
+
 @Component({
   selector: 'app-table',
   imports: [
@@ -33,26 +36,31 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
     NgIcon,
     HlmIcon,
     HlmButtonImports,
+    HlmCheckboxImports,
   ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
   providers: [provideIcons({ lucideChevronDown, lucideChevronUp, lucideChevronsUpDown })],
 })
-export class Table implements AfterContentInit {
+export class Table {
+  COL_TYPE = COL_TYPE;
+  SORT_ORDER = SORT_ORDER;
+  ALIGN_FROZEN = ALIGN_FROZEN;
+
   data = input<Dictionary<any>[]>([]);
   page = model<number>(1);
   pageSize = model<number>(10);
   totalItems = input<number>(0);
-  COL_TYPE = COL_TYPE;
-  SORT_ORDER = SORT_ORDER;
-  sortChange = output<{ key: string; direction: SORT_ORDER }>();
   isLoading = input<boolean>(false);
+  enableRowSelection = input<boolean>(false); // enable row selection for all rows
+
+  sortChange = output<{ key: string; direction: SORT_ORDER }>();
+
   loadingItems: Signal<number[]> = computed(() => new Array(this.pageSize()));
-  ALIGN_FROZEN = ALIGN_FROZEN;
 
   @ContentChildren(Column) columns!: QueryList<Column>;
 
-  ngAfterContentInit(): void {}
+  rowSelection: WritableSignal<Record<string, boolean>> = signal({});
 
   onSortChange(column: Column): void {
     if (!column.sortable()) {
@@ -73,11 +81,49 @@ export class Table implements AfterContentInit {
     }
 
     this.resetSort(column);
-
     this.sortChange.emit({ key: column.key(), direction: column.sortOrder() });
   }
 
-  resetSort(currentColumn: Column): void {
+  getToggleSelectedHandler(index: number, selected: boolean): void {
+    const key = index.toString();
+
+    this.rowSelection.update((originalSelection) => {
+      const modifiedSelection = JSON.parse(JSON.stringify(originalSelection));
+      if (selected) {
+        modifiedSelection[key] = true;
+      } else {
+        delete modifiedSelection[key];
+      }
+      return modifiedSelection;
+    });
+  }
+  getIsAllPageRowsSelected(): boolean {
+    return Object.keys(this.rowSelection()).length === this.data().length;
+  }
+
+  getIsSomePageRowsSelected(): boolean {
+    return (
+      Object.values(this.rowSelection()).some((value) => value === true) &&
+      !this.getIsAllPageRowsSelected()
+    );
+  }
+
+  // Selects/deselects all rows on the current page.
+  toggleAllPageRowsSelected(): void {
+    const isAllSelected = this.getIsAllPageRowsSelected();
+    if (!isAllSelected) {
+      this.rowSelection.set(
+        this.data().reduce((acc, row, index) => {
+          acc[index.toString()] = true;
+          return acc;
+        }, {}),
+      );
+    } else {
+      this.rowSelection.set({});
+    }
+  }
+
+  private resetSort(currentColumn: Column): void {
     this.columns.forEach((c) => {
       if (c.key() !== currentColumn.key()) {
         c.sortOrder.set(SORT_ORDER.NONE);
