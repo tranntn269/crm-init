@@ -5,7 +5,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmFieldImports } from '@spartan-ng/helm/field';
 import { HlmInputImports } from '@spartan-ng/helm/input';
-import { Login } from '../login/login';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +14,6 @@ import { Login } from '../login/login';
     ReactiveFormsModule,
     HlmFieldImports,
     HlmInputImports,
-    Login,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
