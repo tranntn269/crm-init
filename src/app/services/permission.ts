@@ -1,38 +1,52 @@
-import { effect, inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { UserService } from './user';
-import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Permission {
+export class PermissionService {
   private userService = inject(UserService);
 
-  currentUser: WritableSignal<User | null> = signal(null);
+  currentUser = computed(() => this.userService.currentUser());
 
-  constructor() {
-    effect(() => {
-      const currentUser = this.userService.currentUser();
-      if (currentUser) {
-        this.currentUser.set(this.userService.currentUser()!);
-      }
-    });
-  }
-
-  hasPermission(requiredRoles: string[] = [], requiredDepartments: string[] = []): boolean {
-    if (!this.currentUser()) {
-      console.debug('No current user found');
+  hasRole(requiredRoles: string[], matchAll = true): boolean {
+    const currentUser = this.currentUser();
+    if (!currentUser) {
       return false;
     }
 
-    const userRoles = this.currentUser()!.roles ?? [];
-    const userDepartments = this.currentUser()!.departments ?? [];
+    if (matchAll) {
+      return requiredRoles.every((role) => currentUser.roles?.includes(role));
+    }
 
-    const hasRole = requiredRoles.every((requiredRole) => userRoles.includes(requiredRole));
-    const hasDepartment = requiredDepartments.every((requiredDepartment) =>
-      userDepartments.includes(requiredDepartment),
-    );
+    return requiredRoles.some((role) => currentUser.roles?.includes(role));
+  }
 
-    return hasRole && hasDepartment;
+  hasDepartment(requiredDepartments: string[], matchAll = true): boolean {
+    const currentUser = this.currentUser();
+    if (!currentUser) {
+      return false;
+    }
+
+    if (matchAll) {
+      return requiredDepartments.every((department) =>
+        currentUser.departments?.includes(department),
+      );
+    }
+    return requiredDepartments.some((department) => currentUser.departments?.includes(department));
+  }
+
+  hasPermission(requiredPermissions: string[], matchAll = true): boolean {
+    const currentUser = this.currentUser();
+    if (!currentUser) {
+      return false;
+    }
+
+    if (matchAll) {
+      return requiredPermissions.every((permission) =>
+        currentUser.permissions?.includes(permission),
+      );
+    }
+    return requiredPermissions.every((permission) => currentUser.permissions?.includes(permission));
   }
 }

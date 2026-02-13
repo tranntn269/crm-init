@@ -2,21 +2,21 @@ import { Directive, effect, inject, input, TemplateRef, ViewContainerRef } from 
 import { PermissionService } from '../services/permission';
 
 @Directive({
-  selector: '[hasPermission]',
+  selector: '[hasDepartment]',
 })
-export class HasPermission {
-  hasPermission = input<string[]>();
+export class HasDepartment {
+  hasDepartment = input<string[]>();
   templateRef = inject(TemplateRef);
   viewContainer = inject(ViewContainerRef);
   private permissionService = inject(PermissionService);
 
   constructor() {
     effect(() => {
-      const requiredPermission = this.hasPermission() ?? [];
-      const hasPermission = this.permissionService.hasPermission(requiredPermission, false);
+      const requiredDepartments = this.hasDepartment() ?? [];
 
-      if (hasPermission) {
-        console.debug('User has permission, rendering template');
+      const hasDepartment = this.permissionService.hasDepartment(requiredDepartments, false);
+
+      if (hasDepartment) {
         this.viewContainer.createEmbeddedView(this.templateRef);
       } else {
         this.viewContainer.clear();

@@ -1,5 +1,6 @@
 {
   "username": "Sarah Smith",
   "roles": ["STAFF", "TESTER"],
+  "permissions": ["READ", "CREATE", "UPDATE", "DELETE"],
   "departments": ["TECH"]
 }
