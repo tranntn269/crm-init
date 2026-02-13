@@ -1,46 +1,61 @@
-<div hlmTableContainer>
-  <table hlmTable>
-    <thead hlmTHead>
-      <tr hlmTr class="border-b h-16 bg-[#DFE2E7] hover:bg-[#DFE2E7] border-[#8C9FBD]">
-        @for (column of columns; track $index) {
-          <th hlmTh class="content-end px-5 py-3 text-sm">{{ column.header() }}</th>
-        }
-      </tr>
-    </thead>
-    <tbody hlmTBody>
-      @if (isLoading()) {
-        @for (row of loadingItems; track $index) {
-          <tr hlmTr class="hover:bg-white">
-            @for (column of columns; track $index) {
-              <td hlmTd class="p-4 pl-5">
-                <hlm-skeleton class="h-5 w-full" />
-              </td>
-            }
-          </tr>
-        }
-      } @else if (!isLoading() && rows().length) {
-        @for (row of rows(); track $index) {
-          <tr hlmTr class="border-[#DBDFE0]">
-            @for (column of columns; track $index) {
-              <td hlmTd class="p-4 pl-5">
-                @if (column.cellTmpl) {
-                  <ng-container
-                    *ngTemplateOutlet="column.cellTmpl.templateRef; context: { $implicit: row }"
-                  ></ng-container>
-                } @else if (row[column.key()]) {
-                  {{ row[column.key()] }}
-                } @else {
-                  --
-                }
-              </td>
-            }
-          </tr>
-        }
-      } @else {
-        <tr hlmTr class="hover:bg-white">
-          <td hlmTd colspan="12" class="text-center font-bold p-4">No results</td>
+<div class="flex flex-col gap-4">
+  <div hlmTableContainer>
+    <table hlmTable>
+      <thead hlmTHead>
+        <tr hlmTr class="border-b h-16 bg-[#DFE2E7] hover:bg-[#DFE2E7] border-[#8C9FBD]">
+          @for (column of columns; track $index) {
+            <th hlmTh class="content-end px-5 py-3 text-sm">{{ column.header() }}</th>
+          }
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody hlmTBody>
+        @if (isLoading()) {
+          @for (row of loadingItems(); track $index) {
+            <tr hlmTr class="hover:bg-white">
+              @for (column of columns; track $index) {
+                <td hlmTd class="p-4 pl-5">
+                  <hlm-skeleton class="h-5 w-full" />
+                </td>
+              }
+            </tr>
+          }
+        } @else if (!isLoading() && rows().length) {
+          @for (row of rows(); track $index) {
+            <tr hlmTr class="border-[#DBDFE0]">
+              @for (column of columns; track $index) {
+                <td hlmTd class="p-4 pl-5">
+                  @if (column.cellTmpl) {
+                    <ng-container
+                      *ngTemplateOutlet="column.cellTmpl.templateRef; context: { $implicit: row }"
+                    ></ng-container>
+                  } @else if (row[column.key()]) {
+                    @switch (column.dataType()) {
+                      @case (COL_TYPE.DATE) {
+                        {{ row[column.key()] | date }}
+                      }
+                      @default {
+                        {{ row[column.key()] }}
+                      }
+                    }
+                  } @else {
+                    --
+                  }
+                </td>
+              }
+            </tr>
+          }
+        } @else {
+          <tr hlmTr class="hover:bg-white">
+            <td hlmTd colspan="12" class="text-center font-bold p-4">No results</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <colonial-pagination
+    [(currentPage)]="page"
+    [(itemsPerPage)]="pageSize"
+    [totalItems]="totalItems()"
+  />
 </div>

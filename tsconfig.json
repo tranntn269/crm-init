@@ -42,6 +42,15 @@
       ],
       "@spartan-ng/helm/skeleton": [
         "./libs/ui/skeleton/src/index.ts"
+      ],
+      "@spartan-ng/helm/pagination": [
+        "./libs/ui/pagination/src/index.ts"
+      ],
+      "@spartan-ng/helm/icon": [
+        "./libs/ui/icon/src/index.ts"
+      ],
+      "@spartan-ng/helm/select": [
+        "./libs/ui/select/src/index.ts"
       ]
     }
   },

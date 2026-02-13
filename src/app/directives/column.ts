@@ -15,7 +15,5 @@ export class Column implements AfterContentInit {
   @ContentChild(Cell, { static: true }) cellTmpl?: Cell;
   @ContentChild(Header, { static: true }) headerTmpl?: Header;
 
-  ngAfterContentInit(): void {
-    console.log(this.cellTmpl);
-  }
+  ngAfterContentInit(): void {}
 }

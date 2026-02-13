@@ -1,27 +1,29 @@
-import { AfterContentInit, Component, ContentChild, inject } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { UserService } from '../../services/user';
-import { User } from '../../models/user.model';
 import { Table } from '../../shared/components/table/table';
 import { Column } from '../../directives/column';
 import { COL_TYPE } from '../../models/types.model';
 import { Cell } from '../../directives/cell';
 import { Header } from '../../directives/header';
+import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
 
 @Component({
   selector: 'app-client-management',
-  imports: [CommonModule, Table, Column, DatePipe, Cell, Header],
+  imports: [CommonModule, Table, Column, DatePipe, Cell, Header, HlmSkeletonImports],
   templateUrl: './client-management.html',
   styleUrl: './client-management.scss',
 })
 export class ClientManagement implements AfterContentInit {
-  @ContentChild(Cell) cellTmpl!: Cell;
-
   private userService = inject(UserService);
-  users = this.userService.users.value() as User[];
-  COL_TYPE = COL_TYPE;
 
-  ngAfterContentInit(): void {
-    console.log('cellTmpl', this.cellTmpl);
-  }
+  @ContentChild(Cell) cellTmpl!: Cell;
+  page = signal(1);
+  pageSize = signal(5);
+  COL_TYPE = COL_TYPE;
+  mockXTotalCount = 100; //due to mockapi.io does not support this header response
+
+  usersResource = this.userService.getUsersList(this.page, this.pageSize);
+
+  ngAfterContentInit(): void {}
 }

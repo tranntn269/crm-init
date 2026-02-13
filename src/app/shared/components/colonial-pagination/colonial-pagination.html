@@ -1,0 +1,44 @@
+<div class="flex items-center justify-end gap-2 px-4 py-2 color-var(--hyperlink)">
+  <brn-select [(ngModel)]="itemsPerPage" class="ml-auto" placeholder="Page size">
+    <hlm-select-trigger class="w-fit">
+      <hlm-select-value />
+    </hlm-select-trigger>
+    <hlm-select-content>
+      @for (pageSize of _pageSizesWithCurrent(); track pageSize) {
+        <hlm-option [value]="pageSize">{{ pageSize }} Per Page</hlm-option>
+      }
+    </hlm-select-content>
+  </brn-select>
+
+  <nav hlmPagination class="mx-0 justify-end w-fit">
+    <ul hlmPaginationContent>
+      @if (showEdges() && !_isFirstPageActive()) {
+        <li hlmPaginationItem (click)="goToPrevious()">
+          <hlm-pagination-previous />
+        </li>
+      }
+
+      @for (page of _pages(); track $index) {
+        <li hlmPaginationItem>
+          @if (page === '...') {
+            <hlm-pagination-ellipsis />
+          } @else {
+            <a
+              hlmPaginationLink
+              [isActive]="currentPage() === page"
+              (click)="currentPage.set(page)"
+            >
+              {{ page }}
+            </a>
+          }
+        </li>
+      }
+
+      @if (showEdges() && !_isLastPageActive()) {
+        <li hlmPaginationItem (click)="goToNext()">
+          <hlm-pagination-next />
+        </li>
+      }
+    </ul>
+  </nav>
+</div>
