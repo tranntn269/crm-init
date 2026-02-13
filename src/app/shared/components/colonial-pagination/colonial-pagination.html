@@ -1,0 +1,45 @@
+<div class="colonial-pagination-container flex items-center justify-end gap-2">
+  <brn-select [(ngModel)]="itemsPerPage" class="ml-auto" placeholder="Page size">
+    <hlm-select-trigger class="w-fit bg-white h-11! border-[#5D6584]">
+      <hlm-select-value />
+    </hlm-select-trigger>
+    <hlm-select-content>
+      @for (pageSize of _pageSizesWithCurrent(); track pageSize) {
+        <hlm-option [value]="pageSize">{{ pageSize }} Per Page</hlm-option>
+      }
+    </hlm-select-content>
+  </brn-select>
+
+  <nav hlmPagination class="mx-0 justify-end w-fit text-(--hyperlink)">
+    <ul hlmPaginationContent>
+      @if (showEdges() && !_isFirstPageActive()) {
+        <li hlmPaginationItem (click)="goToPrevious()" class="mr-6">
+          <hlm-pagination-previous class="pagination-prev-btn" />
+        </li>
+      }
+
+      @for (page of _pages(); track $index) {
+        <li hlmPaginationItem>
+          @if (page === '...') {
+            <hlm-pagination-ellipsis class="text-[#030F35] leading-0" />
+          } @else {
+            <a
+              hlmPaginationLink
+              [isActive]="currentPage() === page"
+              (click)="currentPage.set(page)"
+              class="page-item"
+            >
+              {{ page }}
+            </a>
+          }
+        </li>
+      }
+
+      @if (showEdges() && !_isLastPageActive()) {
+        <li hlmPaginationItem (click)="goToNext()" class="ml-6">
+          <hlm-pagination-next class="pagination-next-btn" />
+        </li>
+      }
+    </ul>
+  </nav>
+</div>

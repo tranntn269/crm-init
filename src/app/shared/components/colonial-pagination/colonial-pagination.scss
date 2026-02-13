@@ -1,0 +1,31 @@
+.colonial-pagination-container {
+  .page-item {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    height: 24px;
+    width: auto;
+    aspect-ratio: 1;
+
+    &[data-active],
+    &:hover {
+      font-weight: 700;
+      color: #030f35;
+    }
+  }
+
+  .pagination-prev-btn,
+  .pagination-next-btn {
+    padding: 0;
+
+    ::ng-deep {
+      a[hlmpaginationlink] {
+        padding: 0;
+        background-color: transparent;
+      }
+    }
+  }
+}

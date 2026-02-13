@@ -16,9 +16,18 @@ export const routes: Routes = [
       },
     },
   },
+  // {
+  //   path: 'table',
+  //   loadComponent: () => import('./shared/components/table/table').then((m) => m.Table),
+  // },
+  {
+    path: 'client-management',
+    loadComponent: () =>
+      import('./components/client-management/client-management').then((m) => m.ClientManagement),
+  },
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'client-management',
     pathMatch: 'full',
   },
 ];

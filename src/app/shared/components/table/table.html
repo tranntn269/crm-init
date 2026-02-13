@@ -1,0 +1,126 @@
+<div class="colonial-table-container border border-[#D1D3DE] rounded-lg">
+  <div hlmTableContainer class="rounded-t-[inherit]">
+    <table hlmTable>
+      <thead hlmTHead>
+        <tr hlmTr class="border-b h-16 bg-[#DFE2E7] hover:bg-[#DFE2E7] border-[#8C9FBD]">
+          @if (enableRowSelection()) {
+            <th class="content-end px-5 py-3 w-[60px]">
+              <hlm-checkbox
+                class="table-checkbox"
+                [checked]="isAllPageRowsSelected()"
+                [indeterminate]="isSomePageRowsSelected()"
+                [disabled]="isLoading()"
+                (checkedChange)="toggleAllPageRowsSelected()"
+              />
+            </th>
+          }
+          @for (column of columns; track $index) {
+            <th
+              hlmTh
+              class="content-end px-5 py-3 text-sm"
+              [class.colonial-frozen-column]="column.frozen()"
+              [class.right-0]="column.alignFrozen() === ALIGN_FROZEN.RIGHT"
+            >
+              <button
+                hlmBtn
+                size="sm"
+                variant="ghost"
+                class="btn-sort p-0! h-auto"
+                (click)="onSortChange(column)"
+              >
+                {{ column.header() }}
+                @if (column.sortable()) {
+                  @switch (column.sortOrder()) {
+                    @case (SORT_ORDER.ASC) {
+                      <ng-icon hlm name="lucideChevronDown" class="sort-icon" />
+                    }
+                    @case (SORT_ORDER.DESC) {
+                      <ng-icon hlm name="lucideChevronUp" class="sort-icon" />
+                    }
+                    @case (SORT_ORDER.NONE) {
+                      <ng-icon hlm name="lucideChevronsUpDown" class="sort-icon" />
+                    }
+                  }
+                }
+              </button>
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody hlmTBody>
+        @if (isLoading()) {
+          @for (row of loadingItems(); track $index; let index = $index) {
+            <tr hlmTr class="hover:bg-white">
+              @for (column of columns; track $index) {
+                <td hlmTd class="p-4 pl-5">
+                  <hlm-skeleton class="h-5 w-full" />
+                </td>
+              }
+            </tr>
+          }
+        } @else if (!isLoading() && data().length) {
+          @for (row of data(); track $index; let index = $index) {
+            <tr
+              hlmTr
+              class="border-[#DBDFE0] bg-white hover:bg-[#FFF6E4] h-[68px]"
+              [attr.data-selected]="rowSelection()[row[dataIdKey()]]"
+            >
+              @if (enableRowSelection()) {
+                <td class="text-center px-5">
+                  <hlm-checkbox
+                    class="table-checkbox"
+                    [checked]="rowSelection()[row[dataIdKey()]]"
+                    (checkedChange)="getToggleSelectedHandler(index, $event)"
+                  />
+                </td>
+              }
+              @for (column of columns; track $index) {
+                <td
+                  hlmTd
+                  class="p-4 pl-5"
+                  [class.colonial-frozen-column]="column.frozen()"
+                  [class.right-0]="column.alignFrozen() === ALIGN_FROZEN.RIGHT"
+                >
+                  @if (column.cellTmpl) {
+                    <ng-container
+                      *ngTemplateOutlet="column.cellTmpl.templateRef; context: { $implicit: row }"
+                    ></ng-container>
+                  } @else if (row[column.key()]) {
+                    @switch (column.dataType()) {
+                      @case (COL_TYPE.DATE) {
+                        {{ row[column.key()] | date }}
+                      }
+                      @default {
+                        {{ row[column.key()] }}
+                      }
+                    }
+                  } @else {
+                    --
+                  }
+                </td>
+              }
+            </tr>
+          }
+        } @else {
+          <tr hlmTr class="hover:bg-white">
+            <td hlmTd colspan="12" class="text-center font-bold p-4">No results</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="border-t bg-[#DFE2E7] border-[#D1D3DE] rounded-b-[inherit] flex gap-2.5 items-center justify-between px-6 py-4"
+  >
+    <div>
+      <!-- input custom template -->
+    </div>
+
+    <colonial-pagination
+      [(currentPage)]="page"
+      [(itemsPerPage)]="pageSize"
+      [totalItems]="totalItems()"
+    />
+  </div>
+</div>

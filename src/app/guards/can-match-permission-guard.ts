@@ -18,8 +18,8 @@ export const canMatchPermissionGuard: CanMatchFn = (route, segments) => {
   }
 
   return (
-    permissionService.hasRole(roles) &&
-    permissionService.hasDepartment(departments) &&
-    permissionService.hasPermission(permissions)
+    permissionService.hasRole(roles ?? []) &&
+    permissionService.hasDepartment(departments ?? []) &&
+    permissionService.hasPermission(permissions ?? [])
   );
 };
