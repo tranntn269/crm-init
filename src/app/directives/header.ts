@@ -1,10 +1,8 @@
-import { Directive } from '@angular/core';
+import { Directive, inject, TemplateRef } from '@angular/core';
 
 @Directive({
   selector: '[appHeader]',
 })
 export class Header {
-
-  constructor() { }
-
+  templateRef = inject(TemplateRef<any>);
 }

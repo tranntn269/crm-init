@@ -39,6 +39,9 @@
       ],
       "@spartan-ng/helm/table": [
         "./libs/ui/table/src/index.ts"
+      ],
+      "@spartan-ng/helm/skeleton": [
+        "./libs/ui/skeleton/src/index.ts"
       ]
     }
   },

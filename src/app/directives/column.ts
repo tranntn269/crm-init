@@ -12,8 +12,8 @@ export class Column implements AfterContentInit {
   dataType = input<COL_TYPE>(COL_TYPE.TEXT);
   renderKey = input<string>('');
 
-  @ContentChild(Cell, { static: true }) cellTmpl!: Cell;
-  @ContentChild(Header, { static: true }) headerTmpl!: Header;
+  @ContentChild(Cell, { static: true }) cellTmpl?: Cell;
+  @ContentChild(Header, { static: true }) headerTmpl?: Header;
 
   ngAfterContentInit(): void {
     console.log(this.cellTmpl);
