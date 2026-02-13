@@ -1,10 +1,33 @@
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 colonial-table-container">
   <div hlmTableContainer>
     <table hlmTable>
       <thead hlmTHead>
         <tr hlmTr class="border-b h-16 bg-[#DFE2E7] hover:bg-[#DFE2E7] border-[#8C9FBD]">
           @for (column of columns; track $index) {
-            <th hlmTh class="content-end px-5 py-3 text-sm">{{ column.header() }}</th>
+            <th hlmTh class="content-end px-5 py-3 text-sm">
+              <button
+                hlmBtn
+                size="sm"
+                variant="ghost"
+                class="btn-sort"
+                (click)="onSortChange(column)"
+              >
+                {{ column.header() }}
+                @if (column.sortable()) {
+                  @switch (column.sortDirection()) {
+                    @case (SORT_DIRECTION.ASC) {
+                      <ng-icon hlm size="xl" name="lucideChevronDown" class="sort-icon" />
+                    }
+                    @case (SORT_DIRECTION.DESC) {
+                      <ng-icon hlm size="xs" name="lucideChevronUp" class="sort-icon" />
+                    }
+                    @case (SORT_DIRECTION.NONE) {
+                      <ng-icon hlm size="xl" name="lucideChevronsUpDown" class="sort-icon" />
+                    }
+                  }
+                }
+              </button>
+            </th>
           }
         </tr>
       </thead>

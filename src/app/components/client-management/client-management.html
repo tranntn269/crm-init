@@ -4,12 +4,11 @@
   [(pageSize)]="pageSize"
   [totalItems]="mockXTotalCount"
   [isLoading]="usersResource.isLoading()"
+  (sortChange)="handleSortChange($event)"
 >
-  <table-column header="Name" key="username"></table-column>
-  <table-column header="Departments" key="departments"></table-column>
-  <table-column header="Address" key="address"></table-column>
-  <table-column header="Phone" key="phone">
-    <ng-template appHeader>Client Phone</ng-template>
-  </table-column>
-  <table-column header="DOB" key="dob" [dataType]="COL_TYPE.DATE"> </table-column>
+  <table-column header="Name" key="username" [sortable]="true"></table-column>
+  <table-column header="Departments" key="departments" [sortable]="true"></table-column>
+  <table-column header="Address" key="address" [sortable]="true"></table-column>
+  <table-column header="Phone" key="phone"> </table-column>
+  <table-column header="DOB" key="dob" [dataType]="COL_TYPE.DATE" [sortable]="true"></table-column>
 </app-table>

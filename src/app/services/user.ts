@@ -1,4 +1,4 @@
-import { HttpClient, httpResource } from '@angular/common/http';
+import { HttpClient, HttpParams, httpResource } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { User } from '../models/user.model';
@@ -22,25 +22,36 @@ export class UserService {
 
   users = httpResource(() => `${this.dataUrl}/userList.json`);
 
-  // getUsersList(page: number, size: number) {
+  // getUsersList(page: () => number, size: () => number, sort: () => string) {
   //   return httpResource<User[]>(() => ({
   //     url: this.apiUrl,
   //     params: {
-  //       page: page.toString(),
-  //       limit: size.toString(),
+  //       page: page().toString(),
+  //       limit: size().toString(),
+  //       sort: sort(),
   //     },
   //     observe: 'response',
   //   }));
   // }
-
-  getUsersList(page: () => number, size: () => number) {
-    return httpResource<User[]>(() => ({
-      url: this.apiUrl,
-      params: {
+  getUsersList(page: () => number, size: () => number, sort: () => string) {
+    return httpResource<User[]>(() => {
+      const paramMap = {
         page: page().toString(),
         limit: size().toString(),
-      },
-      observe: 'response',
-    }));
+        sort: sort(),
+      };
+
+      let params = new HttpParams();
+      Object.entries(paramMap).forEach(([key, value]) => {
+        if (value) {
+          params = params.set(key, value);
+        }
+      });
+
+      return {
+        url: this.apiUrl,
+        params: params,
+      };
+    });
   }
 }

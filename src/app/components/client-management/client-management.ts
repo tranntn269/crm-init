@@ -7,6 +7,7 @@ import { COL_TYPE } from '../../models/types.model';
 import { Cell } from '../../directives/cell';
 import { Header } from '../../directives/header';
 import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
+import { SORT_DIRECTION } from '../../enums/table.enum';
 
 @Component({
   selector: 'app-client-management',
@@ -16,14 +17,17 @@ import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
 })
 export class ClientManagement implements AfterContentInit {
   private userService = inject(UserService);
-
   @ContentChild(Cell) cellTmpl!: Cell;
   page = signal(1);
   pageSize = signal(5);
+  sort = signal<string>('');
   COL_TYPE = COL_TYPE;
   mockXTotalCount = 100; //due to mockapi.io does not support this header response
-
-  usersResource = this.userService.getUsersList(this.page, this.pageSize);
+  usersResource = this.userService.getUsersList(this.page, this.pageSize, this.sort);
 
   ngAfterContentInit(): void {}
+
+  handleSortChange(event: { key: string; direction: SORT_DIRECTION }): void {
+    this.sort.set(`${event.key},${event.direction}`);
+  }
 }

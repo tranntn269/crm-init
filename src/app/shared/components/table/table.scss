@@ -1,0 +1,12 @@
+.colonial-table-container {
+  .btn-sort {
+    &:hover {
+      cursor: pointer;
+      background: transparent;
+    }
+  }
+  .sort-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
