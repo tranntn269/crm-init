@@ -1,13 +1,15 @@
 <div class="colonial-table-container border border-[#D1D3DE] rounded-lg">
   <div hlmTableContainer class="rounded-t-[inherit]">
-    <table hlmTable [attr.data-id]="dataId()">
+    <table hlmTable>
       <thead hlmTHead>
         <tr hlmTr class="border-b h-16 bg-[#DFE2E7] hover:bg-[#DFE2E7] border-[#8C9FBD]">
           @if (enableRowSelection()) {
-            <th>
+            <th class="content-end px-5 py-3 w-[60px]">
               <hlm-checkbox
+                class="table-checkbox"
                 [checked]="isAllPageRowsSelected()"
                 [indeterminate]="isSomePageRowsSelected()"
+                [disabled]="isLoading()"
                 (checkedChange)="toggleAllPageRowsSelected()"
               />
             </th>
@@ -23,7 +25,7 @@
                 hlmBtn
                 size="sm"
                 variant="ghost"
-                class="btn-sort"
+                class="btn-sort p-0! h-auto"
                 (click)="onSortChange(column)"
               >
                 {{ column.header() }}
@@ -60,13 +62,14 @@
           @for (row of data(); track $index; let index = $index) {
             <tr
               hlmTr
-              class="border-[#DBDFE0] bg-white hover:bg-[#FFF6E4]"
-              [attr.data-selected]="rowSelection()[row[dataId()]]"
+              class="border-[#DBDFE0] bg-white hover:bg-[#FFF6E4] h-[68px]"
+              [attr.data-selected]="rowSelection()[row[dataIdKey()]]"
             >
               @if (enableRowSelection()) {
-                <td>
+                <td class="text-center px-5">
                   <hlm-checkbox
-                    [checked]="rowSelection()[row[dataId()]]"
+                    class="table-checkbox"
+                    [checked]="rowSelection()[row[dataIdKey()]]"
                     (checkedChange)="getToggleSelectedHandler(index, $event)"
                   />
                 </td>

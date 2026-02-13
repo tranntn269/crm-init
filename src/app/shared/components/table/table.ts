@@ -51,7 +51,7 @@ export class Table {
   page = model<number>(1);
   pageSize = model<number>(10);
   totalItems = input<number>(0);
-  dataId = input<string>('id');
+  dataIdKey = input<string>('id');
   isLoading = input<boolean>(false);
   enableRowSelection = input<boolean>(true);
 
@@ -65,7 +65,7 @@ export class Table {
 
   isAllPageRowsSelected = computed(() => {
     if (this.data().length === 0) return false;
-    return this.data().every((row) => !!this.rowSelection()[row[this.dataId()]]);
+    return this.data().every((row) => !!this.rowSelection()[row[this.dataIdKey()]]);
   });
 
   isSomePageRowsSelected = computed(() => {
@@ -98,15 +98,15 @@ export class Table {
   }
 
   getToggleSelectedHandler(index: number, selected: boolean): void {
-    const dataId = this.dataId();
-    const key = this.data()[index][dataId];
+    const dataIdKey = this.dataIdKey();
+    const id = this.data()[index][dataIdKey];
 
     this.rowSelection.update((originalSelection) => {
       const modifiedSelection = JSON.parse(JSON.stringify(originalSelection));
       if (selected) {
-        modifiedSelection[key] = true;
+        modifiedSelection[id] = true;
       } else {
-        delete modifiedSelection[key];
+        delete modifiedSelection[id];
       }
       return modifiedSelection;
     });
@@ -115,7 +115,7 @@ export class Table {
   getIsAllPageRowsSelected(): boolean {
     if (this.data().length === 0) return false;
 
-    return this.data().every((row) => this.rowSelection()[row[this.dataId()]] === true);
+    return this.data().every((row) => this.rowSelection()[row[this.dataIdKey()]] === true);
   }
 
   getIsSomePageRowsSelected(): boolean {
@@ -128,17 +128,17 @@ export class Table {
   toggleAllPageRowsSelected(): void {
     const isAllSelected = this.getIsAllPageRowsSelected();
 
-    this.rowSelection.update((originalSelectionItem) => {
-      const modifiedSelection = JSON.parse(JSON.stringify(originalSelectionItem));
+    this.rowSelection.update((previousePageSelection) => {
+      const nextPageSelection = JSON.parse(JSON.stringify(previousePageSelection));
       this.data().forEach((row) => {
-        const id = row[this.dataId()];
+        const id = row[this.dataIdKey()];
         if (!isAllSelected) {
-          modifiedSelection[id] = true;
+          nextPageSelection[id] = true;
         } else {
-          delete modifiedSelection[id];
+          delete nextPageSelection[id];
         }
       });
-      return modifiedSelection;
+      return nextPageSelection;
     });
   }
 

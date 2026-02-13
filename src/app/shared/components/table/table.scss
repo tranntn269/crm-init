@@ -20,4 +20,26 @@
   tr[data-selected='true'] {
     background-color: #fff6e4;
   }
+
+  .table-checkbox {
+    ::ng-deep {
+      button {
+        background-color: white;
+        border-radius: 0.125rem;
+        transition: all 300ms;
+        border-color: #5d6584;
+        height: 1.25rem;
+        width: auto;
+        aspect-ratio: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &[data-state='checked'] {
+          background-color: #5982ff;
+          border-color: #5982ff;
+        }
+      }
+    }
+  }
 }
