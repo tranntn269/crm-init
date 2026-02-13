@@ -4,7 +4,12 @@
       <thead hlmTHead>
         <tr hlmTr class="border-b h-16 bg-[#DFE2E7] hover:bg-[#DFE2E7] border-[#8C9FBD]">
           @for (column of columns; track $index) {
-            <th hlmTh class="content-end px-5 py-3 text-sm">
+            <th
+              hlmTh
+              class="content-end px-5 py-3 text-sm"
+              [class.colonial-frozen-column]="column.frozen()"
+              [class.right-0]="column.alignFrozen() === ALIGN_FROZEN.RIGHT"
+            >
               <button
                 hlmBtn
                 size="sm"
@@ -14,14 +19,14 @@
               >
                 {{ column.header() }}
                 @if (column.sortable()) {
-                  @switch (column.sortDirection()) {
-                    @case (SORT_DIRECTION.ASC) {
+                  @switch (column.sortOrder()) {
+                    @case (SORT_ORDER.ASC) {
                       <ng-icon hlm size="xl" name="lucideChevronDown" class="sort-icon" />
                     }
-                    @case (SORT_DIRECTION.DESC) {
+                    @case (SORT_ORDER.DESC) {
                       <ng-icon hlm size="xs" name="lucideChevronUp" class="sort-icon" />
                     }
-                    @case (SORT_DIRECTION.NONE) {
+                    @case (SORT_ORDER.NONE) {
                       <ng-icon hlm size="xl" name="lucideChevronsUpDown" class="sort-icon" />
                     }
                   }
@@ -42,11 +47,16 @@
               }
             </tr>
           }
-        } @else if (!isLoading() && rows().length) {
-          @for (row of rows(); track $index) {
-            <tr hlmTr class="border-[#DBDFE0]">
+        } @else if (!isLoading() && data().length) {
+          @for (row of data(); track $index) {
+            <tr hlmTr class="border-[#DBDFE0] bg-white">
               @for (column of columns; track $index) {
-                <td hlmTd class="p-4 pl-5">
+                <td
+                  hlmTd
+                  class="p-4 pl-5"
+                  [class.colonial-frozen-column]="column.frozen()"
+                  [class.right-0]="column.alignFrozen() === ALIGN_FROZEN.RIGHT"
+                >
                   @if (column.cellTmpl) {
                     <ng-container
                       *ngTemplateOutlet="column.cellTmpl.templateRef; context: { $implicit: row }"

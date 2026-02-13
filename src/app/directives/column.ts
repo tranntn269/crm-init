@@ -2,7 +2,7 @@ import { AfterContentInit, ContentChild, Directive, input, model } from '@angula
 import { COL_TYPE } from '../models/types.model';
 import { Header } from './header';
 import { Cell } from './cell';
-import { SORT_DIRECTION } from '../enums/table.enum';
+import { ALIGN_FROZEN, SORT_ORDER } from '../enums/table.enum';
 
 @Directive({
   selector: 'table-column',
@@ -15,7 +15,11 @@ export class Column implements AfterContentInit {
 
   //Sort
   sortable = input<boolean>(false);
-  sortDirection = model<SORT_DIRECTION>(SORT_DIRECTION.NONE);
+  sortOrder = model<SORT_ORDER>(SORT_ORDER.NONE);
+
+  //Freezing
+  frozen = input<boolean>(false);
+  alignFrozen = input<ALIGN_FROZEN>(ALIGN_FROZEN.LEFT);
 
   @ContentChild(Cell, { static: true }) cellTmpl?: Cell;
   @ContentChild(Header, { static: true }) headerTmpl?: Header;

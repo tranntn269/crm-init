@@ -1,5 +1,5 @@
 <app-table
-  [rows]="usersResource.value() ?? []"
+  [data]="usersResource.value() ?? []"
   [(page)]="page"
   [(pageSize)]="pageSize"
   [totalItems]="mockXTotalCount"
@@ -7,8 +7,20 @@
   (sortChange)="handleSortChange($event)"
 >
   <table-column header="Name" key="username" [sortable]="true"></table-column>
-  <table-column header="Departments" key="departments" [sortable]="true"></table-column>
+  <table-column
+    header="Departments"
+    key="departments"
+    [sortable]="true"
+    [frozen]="true"
+  ></table-column>
   <table-column header="Address" key="address" [sortable]="true"></table-column>
   <table-column header="Phone" key="phone"> </table-column>
-  <table-column header="DOB" key="dob" [dataType]="COL_TYPE.DATE" [sortable]="true"></table-column>
+  <table-column
+    header="DOB"
+    key="dob"
+    [dataType]="COL_TYPE.DATE"
+    [sortable]="true"
+    [frozen]="true"
+    [alignFrozen]="ALIGN_FROZEN.RIGHT"
+  ></table-column>
 </app-table>

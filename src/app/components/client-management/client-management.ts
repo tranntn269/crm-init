@@ -7,7 +7,7 @@ import { COL_TYPE } from '../../models/types.model';
 import { Cell } from '../../directives/cell';
 import { Header } from '../../directives/header';
 import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
-import { SORT_DIRECTION } from '../../enums/table.enum';
+import { ALIGN_FROZEN, SORT_ORDER } from '../../enums/table.enum';
 
 @Component({
   selector: 'app-client-management',
@@ -24,10 +24,11 @@ export class ClientManagement implements AfterContentInit {
   COL_TYPE = COL_TYPE;
   mockXTotalCount = 100; //due to mockapi.io does not support this header response
   usersResource = this.userService.getUsersList(this.page, this.pageSize, this.sort);
+  ALIGN_FROZEN = ALIGN_FROZEN;
 
   ngAfterContentInit(): void {}
 
-  handleSortChange(event: { key: string; direction: SORT_DIRECTION }): void {
+  handleSortChange(event: { key: string; direction: SORT_ORDER }): void {
     this.sort.set(`${event.key},${event.direction}`);
   }
 }

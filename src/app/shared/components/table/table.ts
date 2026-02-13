@@ -8,7 +8,6 @@ import {
   output,
   QueryList,
   Signal,
-  signal,
 } from '@angular/core';
 import { Dictionary } from '../../../models/types.model';
 import { Column } from '../../../directives/column';
@@ -20,7 +19,7 @@ import { ColonialPagination } from '../colonial-pagination/colonial-pagination';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { HlmIcon } from '@spartan-ng/helm/icon';
 import { lucideChevronDown, lucideChevronUp, lucideChevronsUpDown } from '@ng-icons/lucide';
-import { SORT_DIRECTION } from '../../../enums/table.enum';
+import { ALIGN_FROZEN, SORT_ORDER } from '../../../enums/table.enum';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 
 @Component({
@@ -40,20 +39,16 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
   providers: [provideIcons({ lucideChevronDown, lucideChevronUp, lucideChevronsUpDown })],
 })
 export class Table implements AfterContentInit {
-  public readonly pages = signal(1);
-
-  rows = input<Dictionary<any>[]>([]);
-  /** Current page (two-way bindable for pagination). */
+  data = input<Dictionary<any>[]>([]);
   page = model<number>(1);
-  /** Items per page (two-way bindable for pagination). */
   pageSize = model<number>(10);
-  totalItems = input<number>(0); //totalItems
+  totalItems = input<number>(0);
   COL_TYPE = COL_TYPE;
+  SORT_ORDER = SORT_ORDER;
+  sortChange = output<{ key: string; direction: SORT_ORDER }>();
   isLoading = input<boolean>(false);
-  // loadingItems = new Array(this.pageSize());
   loadingItems: Signal<number[]> = computed(() => new Array(this.pageSize()));
-  SORT_DIRECTION = SORT_DIRECTION;
-  sortChange = output<{ key: string; direction: SORT_DIRECTION }>();
+  ALIGN_FROZEN = ALIGN_FROZEN;
 
   @ContentChildren(Column) columns!: QueryList<Column>;
 
@@ -64,25 +59,29 @@ export class Table implements AfterContentInit {
       return;
     }
 
-    switch (column.sortDirection()) {
-      case SORT_DIRECTION.NONE:
-        column.sortDirection.set(SORT_DIRECTION.ASC);
+    switch (column.sortOrder()) {
+      case SORT_ORDER.NONE:
+        column.sortOrder.set(SORT_ORDER.ASC);
         break;
-      case SORT_DIRECTION.ASC:
-        column.sortDirection.set(SORT_DIRECTION.DESC);
+      case SORT_ORDER.ASC:
+        column.sortOrder.set(SORT_ORDER.DESC);
         break;
-      case SORT_DIRECTION.DESC:
+      case SORT_ORDER.DESC:
       default:
-        column.sortDirection.set(SORT_DIRECTION.NONE);
+        column.sortOrder.set(SORT_ORDER.NONE);
         break;
     }
 
+    this.resetSort(column);
+
+    this.sortChange.emit({ key: column.key(), direction: column.sortOrder() });
+  }
+
+  resetSort(currentColumn: Column): void {
     this.columns.forEach((c) => {
-      if (c.key() !== column.key()) {
-        c.sortDirection.set(SORT_DIRECTION.NONE);
+      if (c.key() !== currentColumn.key()) {
+        c.sortOrder.set(SORT_ORDER.NONE);
       }
     });
-
-    this.sortChange.emit({ key: column.key(), direction: column.sortDirection() });
   }
 }
