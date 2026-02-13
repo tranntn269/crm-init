@@ -51,8 +51,9 @@ export class Table {
   page = model<number>(1);
   pageSize = model<number>(10);
   totalItems = input<number>(0);
+  dataId = input<string>('id');
   isLoading = input<boolean>(false);
-  enableRowSelection = input<boolean>(false); // enable row selection for all rows
+  enableRowSelection = input<boolean>(true);
 
   sortChange = output<{ key: string; direction: SORT_ORDER }>();
 
@@ -61,6 +62,18 @@ export class Table {
   @ContentChildren(Column) columns!: QueryList<Column>;
 
   rowSelection: WritableSignal<Record<string, boolean>> = signal({});
+
+  isAllPageRowsSelected = computed(() => {
+    if (this.data().length === 0) return false;
+    return this.data().every((row) => !!this.rowSelection()[row[this.dataId()]]);
+  });
+
+  isSomePageRowsSelected = computed(() => {
+    return (
+      Object.values(this.rowSelection()).some((value) => value === true) &&
+      !this.isAllPageRowsSelected()
+    );
+  });
 
   onSortChange(column: Column): void {
     if (!column.sortable()) {
@@ -85,7 +98,8 @@ export class Table {
   }
 
   getToggleSelectedHandler(index: number, selected: boolean): void {
-    const key = index.toString();
+    const dataId = this.dataId();
+    const key = this.data()[index][dataId];
 
     this.rowSelection.update((originalSelection) => {
       const modifiedSelection = JSON.parse(JSON.stringify(originalSelection));
@@ -97,8 +111,11 @@ export class Table {
       return modifiedSelection;
     });
   }
+
   getIsAllPageRowsSelected(): boolean {
-    return Object.keys(this.rowSelection()).length === this.data().length;
+    if (this.data().length === 0) return false;
+
+    return this.data().every((row) => this.rowSelection()[row[this.dataId()]] === true);
   }
 
   getIsSomePageRowsSelected(): boolean {
@@ -108,19 +125,21 @@ export class Table {
     );
   }
 
-  // Selects/deselects all rows on the current page.
   toggleAllPageRowsSelected(): void {
     const isAllSelected = this.getIsAllPageRowsSelected();
-    if (!isAllSelected) {
-      this.rowSelection.set(
-        this.data().reduce((acc, row, index) => {
-          acc[index.toString()] = true;
-          return acc;
-        }, {}),
-      );
-    } else {
-      this.rowSelection.set({});
-    }
+
+    this.rowSelection.update((originalSelectionItem) => {
+      const modifiedSelection = JSON.parse(JSON.stringify(originalSelectionItem));
+      this.data().forEach((row) => {
+        const id = row[this.dataId()];
+        if (!isAllSelected) {
+          modifiedSelection[id] = true;
+        } else {
+          delete modifiedSelection[id];
+        }
+      });
+      return modifiedSelection;
+    });
   }
 
   private resetSort(currentColumn: Column): void {

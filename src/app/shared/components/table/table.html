@@ -1,15 +1,17 @@
 <div class="colonial-table-container border border-[#D1D3DE] rounded-lg">
   <div hlmTableContainer class="rounded-t-[inherit]">
-    <table hlmTable>
+    <table hlmTable [attr.data-id]="dataId()">
       <thead hlmTHead>
         <tr hlmTr class="border-b h-16 bg-[#DFE2E7] hover:bg-[#DFE2E7] border-[#8C9FBD]">
-          <th>
-            <hlm-checkbox
-              [checked]="getIsAllPageRowsSelected()"
-              [indeterminate]="getIsSomePageRowsSelected()"
-              (checkedChange)="toggleAllPageRowsSelected()"
-            />
-          </th>
+          @if (enableRowSelection()) {
+            <th>
+              <hlm-checkbox
+                [checked]="isAllPageRowsSelected()"
+                [indeterminate]="isSomePageRowsSelected()"
+                (checkedChange)="toggleAllPageRowsSelected()"
+              />
+            </th>
+          }
           @for (column of columns; track $index) {
             <th
               hlmTh
@@ -59,14 +61,16 @@
             <tr
               hlmTr
               class="border-[#DBDFE0] bg-white hover:bg-[#FFF6E4]"
-              [attr.data-selected]="rowSelection()[index]"
+              [attr.data-selected]="rowSelection()[row[dataId()]]"
             >
-              <td>
-                <hlm-checkbox
-                  [checked]="rowSelection()[index]"
-                  (checkedChange)="getToggleSelectedHandler(index, $event)"
-                />
-              </td>
+              @if (enableRowSelection()) {
+                <td>
+                  <hlm-checkbox
+                    [checked]="rowSelection()[row[dataId()]]"
+                    (checkedChange)="getToggleSelectedHandler(index, $event)"
+                  />
+                </td>
+              }
               @for (column of columns; track $index) {
                 <td
                   hlmTd
